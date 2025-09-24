@@ -66,8 +66,8 @@ export const generateReportAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       if (!pythonService) {
@@ -77,8 +77,8 @@ export const generateReportAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Get comprehensive knowledge graph data
@@ -93,8 +93,8 @@ export const generateReportAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       if (stats.totalFiles === 0) {
@@ -104,8 +104,8 @@ export const generateReportAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Prepare comprehensive data for Python script
@@ -185,7 +185,7 @@ Local Path: \`${path.relative(process.cwd(), reportsDir)}\``;
       }
 
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
 
     } catch (error) {
       logger.error('Error in GENERATE_COMPREHENSIVE_REPORT action:', error);
@@ -197,7 +197,7 @@ Local Path: \`${path.relative(process.cwd(), reportsDir)}\``;
       };
       
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
 

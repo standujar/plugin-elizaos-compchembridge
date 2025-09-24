@@ -67,8 +67,8 @@ export const parseGaussianFileAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       if (!pythonEnv.cclibAvailable) {
@@ -78,8 +78,8 @@ export const parseGaussianFileAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Extract file path from message or use example files
@@ -113,8 +113,8 @@ export const parseGaussianFileAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Parse the Gaussian file
@@ -231,7 +231,7 @@ export const parseGaussianFileAction: Action = {
       };
 
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
 
     } catch (error) {
       logger.error('Error in Gaussian file parsing:', error);
@@ -243,7 +243,7 @@ export const parseGaussianFileAction: Action = {
       };
       
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
 

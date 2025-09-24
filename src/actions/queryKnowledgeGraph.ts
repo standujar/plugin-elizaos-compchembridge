@@ -70,7 +70,7 @@ export const queryKnowledgeGraphAction: Action = {
         if (callback) {
           await callback(errorContent);
         }
-        return errorContent;
+        return;
       }
 
       let responseText: string;
@@ -145,7 +145,7 @@ ${result.totalMatches > 10 ? '... (showing first 10 results)' : ''}`;
         await callback(responseContent);
       }
 
-      return responseContent;
+      return;
     } catch (error) {
       logger.error('Error in QUERY_KNOWLEDGE_GRAPH action:', error);
       
@@ -159,7 +159,7 @@ ${result.totalMatches > 10 ? '... (showing first 10 results)' : ''}`;
         await callback(errorContent);
       }
       
-      return errorContent;
+      await callback?.(errorContent); return;
     }
   },
 

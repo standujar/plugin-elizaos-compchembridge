@@ -60,8 +60,8 @@ export const analyzeMolecularDataAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Extract molecular data from message or use example data
@@ -140,7 +140,7 @@ export const analyzeMolecularDataAction: Action = {
       };
 
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
 
     } catch (error) {
       logger.error('Error in molecular data analysis:', error);
@@ -152,7 +152,7 @@ export const analyzeMolecularDataAction: Action = {
       };
       
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
 
