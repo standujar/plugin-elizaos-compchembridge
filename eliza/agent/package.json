@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "@elizaos/client-direct": "workspace:*",
-        "@elizaos/core": "workspace:*",
+        "@elizaos/core": "1.5.11",
         "@elizaos/plugin-bootstrap": "workspace:*",
         "@elizaos/plugin-gaussian-kg": "workspace:*",
         "@types/node": "^22.13.5",

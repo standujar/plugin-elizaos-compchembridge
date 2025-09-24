@@ -1,7 +1,7 @@
 {
   "name": "plugin-my-compchem-plugin-v2",
   "description": "Advanced computational chemistry plugin for ElizaOS with integrated Python analysis capabilities",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -39,7 +39,7 @@
     "tsup.config.ts"
   ],
   "dependencies": {
-    "@elizaos/core": "latest",
+    "@elizaos/core": "1.5.11",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "clsx": "^2.1.1",
@@ -48,7 +48,7 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.10",
     "vite": "^6.3.5",
-    "zod": "^3.25.0"
+    "zod": "^4.0.5"
   },
   "devDependencies": {
     "@elizaos/cli": "latest",
