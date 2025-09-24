@@ -842,13 +842,13 @@ var AutoKnowledgeService = class _AutoKnowledgeService extends Service2 {
       };
       logger3.info(`\u{1F50D} Calling Python service to parse ${filename}...`);
       const rdfResult = await pythonService.parseGaussianFile(filePath, metadata, "turtle");
-      logger3.info(`\u{1F4DD} Python service returned:`, {
+      logger3.info(`\u{1F4DD} Python service returned: ${JSON.stringify({
         type: typeof rdfResult,
         isString: typeof rdfResult === "string",
         hasError: rdfResult && typeof rdfResult === "object" && "error" in rdfResult,
         length: typeof rdfResult === "string" ? rdfResult.length : "N/A",
         preview: typeof rdfResult === "string" ? rdfResult.substring(0, 100) + "..." : rdfResult
-      });
+      })}`);
       let rdfContent = null;
       let success = false;
       if (typeof rdfResult === "string") {
@@ -874,44 +874,17 @@ var AutoKnowledgeService = class _AutoKnowledgeService extends Service2 {
         await fs3.appendFile(this.knowledgeGraphPath, contentToAppend, "utf-8");
         this.processedFiles.add(filename);
         const tripleCount = (rdfContent.match(/\./g) || []).length;
-        const successMessage = `\u2705 Auto-added ${tripleCount} triples from ${filename}`;
-        logger3.info(successMessage);
-        try {
-          const chatMessage = `\u{1F9E0} **Auto Knowledge Update**
-
-${successMessage}
-
-\u{1F4C1} **File:** \`${filename}\`
-\u{1F4CA} **Triples Added:** ${tripleCount}
-\u23F0 **Processed:** ${(/* @__PURE__ */ new Date()).toLocaleString()}`;
-          const messageManager = this.runtime.messageManager;
-          if (messageManager) {
-            await messageManager.createMemory({
-              userId: this.runtime.agentId,
-              agentId: this.runtime.agentId,
-              roomId: this.runtime.agentId,
-              // Use agent's room for system messages
-              content: {
-                text: chatMessage,
-                source: "auto-knowledge-service"
-              },
-              createdAt: Date.now()
-            });
-            logger3.debug(`\u{1F4E8} Sent chat message for ${filename}`);
-          }
-        } catch (chatError) {
-          logger3.debug("Could not send message to chat:", chatError.message);
-        }
+        logger3.info(`\u2705 Auto-added ${tripleCount} triples from ${filename}`);
       } else {
         logger3.error(`\u274C Could not parse ${filename}: Invalid or empty RDF content`);
       }
     } catch (error) {
-      logger3.error(`\u274C Error auto-processing ${filename}:`, {
+      logger3.error(`\u274C Error auto-processing ${filename}: ${JSON.stringify({
         message: error.message,
         stack: error.stack,
         name: error.name,
         fullError: error
-      });
+      })}`);
     }
   }
   // Simple query method
@@ -1096,7 +1069,7 @@ var analyzeMolecularDataAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const molecularData = extractMolecularDataFromMessage(message) || {
         formula: "C6H6",
@@ -1187,7 +1160,7 @@ var analyzeMolecularDataAction = {
         source: message.content.source
       };
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
     } catch (error) {
       logger4.error("Error in molecular data analysis:", error);
       const errorContent = {
@@ -1196,7 +1169,7 @@ var analyzeMolecularDataAction = {
         source: message.content.source
       };
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
   examples: [
@@ -1296,7 +1269,7 @@ var parseGaussianFileAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       if (!pythonEnv.cclibAvailable) {
         const errorContent = {
@@ -1305,7 +1278,7 @@ var parseGaussianFileAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       logger5.info(`\u{1F50D} Attempting to extract file path from message: "${message.content.text}"`);
       const extractedPath = extractFilePathFromMessage(message);
@@ -1341,7 +1314,7 @@ var parseGaussianFileAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const metadata = {
         user_request: message.content.text,
@@ -1463,7 +1436,7 @@ var parseGaussianFileAction = {
         source: message.content.source
       };
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
     } catch (error) {
       logger5.error("Error in Gaussian file parsing:", error);
       const errorContent = {
@@ -1472,7 +1445,7 @@ var parseGaussianFileAction = {
         source: message.content.source
       };
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
   examples: [
@@ -1742,7 +1715,7 @@ var diagnosticsAction = {
         source: message.content.source
       };
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
     } catch (error) {
       logger6.error("Error in diagnostics:", error);
       const errorContent = {
@@ -1751,7 +1724,7 @@ var diagnosticsAction = {
         source: message.content.source
       };
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
   examples: [
@@ -1823,7 +1796,7 @@ var autoKnowledgeAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const userQuery = message.content.text?.toLowerCase() || "";
       const isEnergyQuery = userQuery.includes("energy") || userQuery.includes("energies") || userQuery.includes("scf");
@@ -1837,7 +1810,7 @@ var autoKnowledgeAction = {
             source: message.content.source
           };
           if (callback) await callback(errorContent);
-          return errorContent;
+          return;
         }
         responseText = `\u26A1 **SCF Energies from Knowledge Graph**
 
@@ -1876,7 +1849,7 @@ var autoKnowledgeAction = {
             source: message.content.source
           };
           if (callback) await callback(errorContent);
-          return errorContent;
+          return;
         }
         responseText = `\u{1F9E0} **Automatic Knowledge Graph Status**
 
@@ -1903,7 +1876,7 @@ ${stats.totalFiles === 0 ? "\n\u{1F680} **Get started:** Copy some Gaussian log 
         source: message.content.source
       };
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
     } catch (error) {
       logger7.error("Error in AUTO_KNOWLEDGE_STATS action:", error);
       const errorContent = {
@@ -1912,7 +1885,7 @@ ${stats.totalFiles === 0 ? "\n\u{1F680} **Get started:** Copy some Gaussian log 
         source: message.content.source
       };
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
   examples: [
@@ -2013,7 +1986,7 @@ var generateVisualizationAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       if (!pythonService) {
         const errorContent = {
@@ -2022,7 +1995,7 @@ var generateVisualizationAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const stats = await autoService.getStats();
       const energyData = await autoService.getEnergies();
@@ -2034,7 +2007,7 @@ var generateVisualizationAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       if (stats.totalFiles === 0) {
         const errorContent = {
@@ -2043,7 +2016,7 @@ var generateVisualizationAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const userQuery = message.content.text?.toLowerCase() || "";
       const chartType = detectChartType(userQuery);
@@ -2094,7 +2067,7 @@ ${chartList}`;
         logger8.info(`Generated ${generatedCharts.length} chart files without attachments to avoid payload issues`);
       }
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
     } catch (error) {
       logger8.error("Error in GENERATE_VISUALIZATION action:", error);
       const errorContent = {
@@ -2103,7 +2076,7 @@ ${chartList}`;
         source: message.content.source
       };
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
   examples: [
@@ -2259,7 +2232,7 @@ var generateReportAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       if (!pythonService) {
         const errorContent = {
@@ -2268,7 +2241,7 @@ var generateReportAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const stats = await autoService.getStats();
       const energyData = await autoService.getEnergies();
@@ -2280,7 +2253,7 @@ var generateReportAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       if (stats.totalFiles === 0) {
         const errorContent = {
@@ -2289,7 +2262,7 @@ var generateReportAction = {
           source: message.content.source
         };
         if (callback) await callback(errorContent);
-        return errorContent;
+        return;
       }
       const reportData = prepareReportData(energyData, molecularData, stats);
       const timestamp = Date.now();
@@ -2352,7 +2325,7 @@ ${fileList}`;
         logger9.info(`Generated ${reportFiles.length} report files without attachments to avoid payload issues`);
       }
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
     } catch (error) {
       logger9.error("Error in GENERATE_COMPREHENSIVE_REPORT action:", error);
       const errorContent = {
@@ -2361,7 +2334,7 @@ ${fileList}`;
         source: message.content.source
       };
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
   examples: [
@@ -2534,7 +2507,7 @@ var helloWorldAction = {
       if (callback) {
         await callback(responseContent);
       }
-      return responseContent;
+      return;
     } catch (error) {
       logger10.error("Error in HELLO_WORLD action:", error);
       throw error;
@@ -2639,7 +2612,7 @@ var myCompchemPlugin = {
     } catch (error) {
       if (error instanceof z.ZodError) {
         throw new Error(
-          `Invalid plugin configuration: ${error.errors.map((e) => e.message).join(", ")}`
+          `Invalid plugin configuration: ${error.issues.map((e) => e.message).join(", ")}`
         );
       }
       throw error;
@@ -2690,25 +2663,25 @@ var myCompchemPlugin = {
     MESSAGE_RECEIVED: [
       async (params) => {
         logger10.debug("MESSAGE_RECEIVED event received");
-        logger10.debug(Object.keys(params));
+        logger10.debug(`Params keys: ${Object.keys(params).join(", ")}`);
       }
     ],
     VOICE_MESSAGE_RECEIVED: [
       async (params) => {
         logger10.debug("VOICE_MESSAGE_RECEIVED event received");
-        logger10.debug(Object.keys(params));
+        logger10.debug(`Params keys: ${Object.keys(params).join(", ")}`);
       }
     ],
     WORLD_CONNECTED: [
       async (params) => {
         logger10.debug("WORLD_CONNECTED event received");
-        logger10.debug(Object.keys(params));
+        logger10.debug(`Params keys: ${Object.keys(params).join(", ")}`);
       }
     ],
     WORLD_JOINED: [
       async (params) => {
         logger10.debug("WORLD_JOINED event received");
-        logger10.debug(Object.keys(params));
+        logger10.debug(`Params keys: ${Object.keys(params).join(", ")}`);
       }
     ]
   },

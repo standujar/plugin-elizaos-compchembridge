@@ -64,8 +64,8 @@ export const generateVisualizationAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       if (!pythonService) {
@@ -75,8 +75,8 @@ export const generateVisualizationAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Get knowledge graph statistics and data
@@ -91,8 +91,8 @@ export const generateVisualizationAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       if (stats.totalFiles === 0) {
@@ -102,8 +102,8 @@ export const generateVisualizationAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       // Determine what type of chart to generate from user message
@@ -175,7 +175,7 @@ export const generateVisualizationAction: Action = {
       }
 
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
 
     } catch (error) {
       logger.error('Error in GENERATE_VISUALIZATION action:', error);
@@ -188,7 +188,7 @@ export const generateVisualizationAction: Action = {
       };
       
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
 

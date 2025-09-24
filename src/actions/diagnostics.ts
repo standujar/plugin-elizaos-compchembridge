@@ -178,7 +178,7 @@ export const diagnosticsAction: Action = {
       };
 
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
 
     } catch (error) {
       logger.error('Error in diagnostics:', error);
@@ -190,7 +190,7 @@ export const diagnosticsAction: Action = {
       };
       
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
 

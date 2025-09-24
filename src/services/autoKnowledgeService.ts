@@ -196,13 +196,13 @@ export class AutoKnowledgeService extends Service {
             const rdfResult = await pythonService.parseGaussianFile(filePath, metadata, 'turtle');
             
             // Add detailed logging to see what we got back
-            logger.info(`📝 Python service returned:`, {
+            logger.info(`📝 Python service returned: ${JSON.stringify({
                 type: typeof rdfResult,
                 isString: typeof rdfResult === 'string',
                 hasError: rdfResult && typeof rdfResult === 'object' && 'error' in rdfResult,
                 length: typeof rdfResult === 'string' ? rdfResult.length : 'N/A',
                 preview: typeof rdfResult === 'string' ? rdfResult.substring(0, 100) + '...' : rdfResult
-            });
+            })}`);
             
             // Handle both string and object results from Python service
             let rdfContent: string | null = null;
@@ -242,12 +242,12 @@ export class AutoKnowledgeService extends Service {
                 logger.error(`❌ Could not parse ${filename}: Invalid or empty RDF content`);
             }
         } catch (error) {
-            logger.error(`❌ Error auto-processing ${filename}:`, {
+            logger.error(`❌ Error auto-processing ${filename}: ${JSON.stringify({
                 message: error.message,
                 stack: error.stack,
                 name: error.name,
                 fullError: error
-            });
+            })}`);
         }
     }
 

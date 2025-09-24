@@ -91,7 +91,7 @@ const helloWorldAction: Action = {
     _options: any,
     callback?: HandlerCallback,
     _responses?: Memory[]
-  ) => {
+  ): Promise<void> => {
     try {
       logger.info('Handling HELLO_WORLD action');
 
@@ -107,7 +107,7 @@ const helloWorldAction: Action = {
         await callback(responseContent);
       }
 
-      return responseContent;
+      return;
     } catch (error) {
       logger.error('Error in HELLO_WORLD action:', error);
       throw error;
@@ -241,7 +241,7 @@ export const myCompchemPlugin: Plugin = {
     } catch (error) {
       if (error instanceof z.ZodError) {
         throw new Error(
-          `Invalid plugin configuration: ${error.errors.map((e) => e.message).join(', ')}`
+          `Invalid plugin configuration: ${error.issues.map((e) => e.message).join(', ')}`
         );
       }
       throw error;
@@ -301,28 +301,28 @@ export const myCompchemPlugin: Plugin = {
       async (params) => {
         logger.debug('MESSAGE_RECEIVED event received');
         // print the keys
-        logger.debug(Object.keys(params));
+        logger.debug(`Params keys: ${Object.keys(params).join(', ')}`);
       },
     ],
     VOICE_MESSAGE_RECEIVED: [
       async (params) => {
         logger.debug('VOICE_MESSAGE_RECEIVED event received');
         // print the keys
-        logger.debug(Object.keys(params));
+        logger.debug(`Params keys: ${Object.keys(params).join(', ')}`);
       },
     ],
     WORLD_CONNECTED: [
       async (params) => {
         logger.debug('WORLD_CONNECTED event received');
         // print the keys
-        logger.debug(Object.keys(params));
+        logger.debug(`Params keys: ${Object.keys(params).join(', ')}`);
       },
     ],
     WORLD_JOINED: [
       async (params) => {
         logger.debug('WORLD_JOINED event received');
         // print the keys
-        logger.debug(Object.keys(params));
+        logger.debug(`Params keys: ${Object.keys(params).join(', ')}`);
       },
     ],
   },

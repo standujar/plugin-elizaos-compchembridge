@@ -60,8 +60,8 @@ export const autoKnowledgeAction: Action = {
           source: message.content.source,
         };
         
-        if (callback) await callback(errorContent);
-        return errorContent;
+      if (callback) await callback(errorContent);
+      return;
       }
 
       const userQuery = message.content.text?.toLowerCase() || '';
@@ -80,8 +80,8 @@ export const autoKnowledgeAction: Action = {
             source: message.content.source,
           };
           
-          if (callback) await callback(errorContent);
-          return errorContent;
+      if (callback) await callback(errorContent);
+      return;
         }
 
         responseText = `⚡ **SCF Energies from Knowledge Graph**\n\n`;
@@ -118,8 +118,8 @@ export const autoKnowledgeAction: Action = {
             source: message.content.source,
           };
           
-          if (callback) await callback(errorContent);
-          return errorContent;
+      if (callback) await callback(errorContent);
+      return;
         }
 
         responseText = `🧠 **Automatic Knowledge Graph Status**
@@ -154,7 +154,7 @@ ${stats.totalFiles === 0 ?
       };
 
       if (callback) await callback(responseContent);
-      return responseContent;
+      return;
 
     } catch (error) {
       logger.error('Error in AUTO_KNOWLEDGE_STATS action:', error);
@@ -166,7 +166,7 @@ ${stats.totalFiles === 0 ?
       };
       
       if (callback) await callback(errorContent);
-      return errorContent;
+      return;
     }
   },
 
